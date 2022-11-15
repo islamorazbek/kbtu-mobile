@@ -5,14 +5,18 @@ import { logInThunk, logOutThunk, registerThunk } from "./auth.thunk";
 const authSlice = createSlice({
   name: "auth",
   initialState: authState,
-  reducers: {},
+  reducers: {
+    resetAuthError: (state) => {
+      state.error = ""
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(logInThunk.pending, (state) => {
       state.isAuthLoading = true;
     });
     builder.addCase(logInThunk.rejected, (state, action) => {
       state.isAuthLoading = false;
-      state.error = action.payload;
+      state.error = action.payload as string;
     });
     builder.addCase(logInThunk.fulfilled, (state, action) => {
       state.isAuthenticated = true;
@@ -25,7 +29,7 @@ const authSlice = createSlice({
     });
     builder.addCase(registerThunk.rejected, (state, action) => {
       state.isAuthLoading = false;
-      state.error = action.payload;
+      state.error = action.payload as string;
     });
     builder.addCase(registerThunk.fulfilled, (state, action) => {
       state.isAuthenticated = true;
@@ -41,3 +45,5 @@ const authSlice = createSlice({
 })
 
 export const authReducer = authSlice.reducer;
+
+export const { resetAuthError } = authSlice.actions;

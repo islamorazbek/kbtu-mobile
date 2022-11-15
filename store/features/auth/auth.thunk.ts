@@ -14,8 +14,8 @@ export const logInThunk = createAsyncThunk(
       await SecureStore.setItemAsync('access_token', access_token)
       return { access_token, profile };
     } catch (error: any) {
-      console.error(error);
-      return thunkAPI.rejectWithValue(error.data.status);
+      console.log(error.response.data);
+      return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
 );
@@ -31,8 +31,8 @@ export const registerThunk = createAsyncThunk(
       await SecureStore.setItemAsync('access_token', access_token)
       return { access_token, profile };
     } catch (error: any) {
-      console.error(error);
-      return thunkAPI.rejectWithValue(error.data.status);
+      console.log(error.response.data);
+      return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
 );

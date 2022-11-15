@@ -1,13 +1,14 @@
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useAppDispatch, useTypedSelector } from '../../hooks/redux-toolkit';
 import { loginSchema } from '../../schemas/login.schema';
+import { resetAuthError } from '../../store/features/auth/auth.slice';
 import { logInThunk } from '../../store/features/auth/auth.thunk';
 
 const Login = () => {
   const dispatch = useAppDispatch();
-  const { isAuthLoading } = useTypedSelector(store => store.auth);
+  const { isAuthLoading, error } = useTypedSelector(store => store.auth);
 
   const formik = useFormik({
     initialValues: {
@@ -21,6 +22,12 @@ const Login = () => {
   })
 
   const { values, handleChange, handleBlur, handleSubmit, isValid, errors, dirty } = formik;
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetAuthError())
+    }
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -47,6 +54,12 @@ const Login = () => {
           onBlur={handleBlur('password')}
         />
       </View>
+
+      {error &&
+        <View style={{ marginBottom: 10 }}>
+          <Text style={{ color: 'red' }}>{error}</Text>
+        </View>
+      }
 
       <TouchableOpacity
         onPress={() => handleSubmit()}

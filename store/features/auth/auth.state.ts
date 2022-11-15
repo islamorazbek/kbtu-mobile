@@ -4,12 +4,12 @@ type AuthType = {
   isAuthenticated: boolean;
   profile: IProfile | null;
   isAuthLoading: boolean;
-  error: any;
+  error: string;
 };
 
 export const authState: AuthType = {
   isAuthenticated: false,
   profile: null,
   isAuthLoading: false,
-  error: null
+  error: ""
 };

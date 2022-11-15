@@ -3,18 +3,24 @@ import React, { useEffect, useState } from 'react'
 import { Button, KeyboardAvoidingView, StyleSheet, View } from 'react-native'
 import Login from '../../components/forms/Login'
 import Register from '../../components/forms/Register'
-import { useTypedSelector } from '../../hooks/redux-toolkit'
+import { useAppDispatch, useTypedSelector } from '../../hooks/redux-toolkit'
+import { resetAuthError } from '../../store/features/auth/auth.slice'
 import { RootStackParamList } from '../../types/routing'
 
 type AuthScreenProps = NativeStackScreenProps<RootStackParamList, 'Auth'>
 
 const AuthScreen: React.FC<AuthScreenProps> = ({ route, navigation }) => {
   const { isAuthenticated } = useTypedSelector(store => store.auth);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (isAuthenticated) {
       navigation.navigate('Home')
     }
+    return () => {
+      dispatch(resetAuthError())
+    }
+
   }, [isAuthenticated])
 
   const [isRegistration, setIsRegistration] = useState(false);
@@ -28,7 +34,7 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ route, navigation }) => {
         <Register />
       }
 
-      <View style={{marginTop: 10}}>
+      <View style={{ marginTop: 10 }}>
         {isRegistration ?
           <Button title='Already have an account? Log in' onPress={() => setIsRegistration(false)} />
           : <Button title='Do not have an account? Register' onPress={() => setIsRegistration(true)} />
